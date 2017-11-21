@@ -7,13 +7,15 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import numpy as np
-from scipy.misc import imread, imresize
+from imageio import imread
+from scipy.misc import imresize
 import hickle as hkl
 from kitti_settings import *
 
 
 desired_im_sz = (128, 160)
 categories = ['city', 'residential', 'road']
+#categories = ['residential', 'road']
 
 # Recordings used for validation and testing.
 # Were initially chosen randomly such that one of the city recordings was used for validation and one of each category was used for testing.
@@ -38,7 +40,8 @@ def download_data():
         for i, d in enumerate(drive_list):
             print str(i+1) + '/' + str(len(drive_list)) + ": " + d
             url = "http://kitti.is.tue.mpg.de/kitti/raw_data/" + d + "/" + d + "_sync.zip"
-            urllib.urlretrieve(url, filename=c_dir + d + "_sync.zip")
+            if not os.path.exists(c_dir + d + "_sync.zip"):
+                urllib.urlretrieve(url, filename=c_dir + d + "_sync.zip")
 
 
 # unzip images
